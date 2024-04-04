@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "465611073165",
+    "project_id": "autoshare-123",
+    "storage_bucket": "autoshare-123.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:465611073165:android:4c70536f5315de64b064c4",
+        "android_client_info": {
+          "package_name": "com.carflyxt.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFRi-20gW2ITr6044R9WblTU8pO8sz62c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
