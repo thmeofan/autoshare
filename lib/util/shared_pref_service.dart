@@ -1,24 +1,33 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../data/model/coffee_shop.dart';
+import 'package:flutter/material.dart';
+import '../data/model/car_model.dart';
 
 class SharedPreferencesService {
-  static const String _coffeeShopsKey = 'coffee_shop';
+  static const String _carsKey = 'cars';
 
-  Future<void> saveCoffeeShops(List<CoffeeShop> coffeeShops) async {
+  Future<void> saveCars(List<Car> cars) async {
     final prefs = await SharedPreferences.getInstance();
-    final coffeeShopsJson =
-        jsonEncode(coffeeShops.map((vm) => vm.toJson()).toList());
-    await prefs.setString(_coffeeShopsKey, coffeeShopsJson);
+    final carsJson = jsonEncode(cars.map((car) => car.toJson()).toList());
+    await prefs.setString(_carsKey, carsJson);
   }
 
-  Future<List<CoffeeShop>> getCoffeeShops() async {
+  Future<List<Car>> getCars() async {
     final prefs = await SharedPreferences.getInstance();
-    final coffeeShopsJson = prefs.getString(_coffeeShopsKey);
-    if (coffeeShopsJson != null) {
-      final List<dynamic> coffeeShopsList = jsonDecode(coffeeShopsJson);
-      return coffeeShopsList.map((json) => CoffeeShop.fromJson(json)).toList();
+    final carsJson = prefs.getString(_carsKey);
+    if (carsJson != null) {
+      final List<dynamic> carsList = jsonDecode(carsJson);
+      return carsList.map((json) => Car.fromJson(json)).toList();
     }
     return [];
+  }
+
+  Future<void> deleteCar(String id) async {
+    final prefs = await SharedPreferences.getInstance();
+    final cars = await getCars();
+    final updatedCars = cars.where((car) => car.id != id).toList();
+    final carsJson =
+        jsonEncode(updatedCars.map((car) => car.toJson()).toList());
+    await prefs.setString(_carsKey, carsJson);
   }
 }

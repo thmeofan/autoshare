@@ -5,7 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'blocs/coffee_shop_cubit/coffee_shop_cubit.dart';
+import 'blocs/car_cubit/cars_cubit.dart';
 import 'data/repository/onboarding_repository.dart';
 import 'firebase_options.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
@@ -22,12 +22,12 @@ Future<void> main() async {
   bool isFirstTime = await checkFirstLaunch();
 
   runApp(BlocProvider(
-    create: (context) => CoffeeShopCubit(SharedPreferencesService()),
+    create: (context) => CarsCubit(SharedPreferencesService()),
     child: FutureBuilder(
       future: fetchPrivacyPolicyLink(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return MaterialApp(
+          return const MaterialApp(
             debugShowCheckedModeBanner: false,
             home: Scaffold(
               body: Center(
@@ -93,7 +93,7 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.purple),
+      theme: ThemeData(primarySwatch: Colors.blue),
       onGenerateRoute: (settings) {
         if (privacyPolicyLink.isNotEmpty && privacyPolicyLink != 'haveNoLink') {
           return MaterialPageRoute(builder: (context) => ScreenNew());
