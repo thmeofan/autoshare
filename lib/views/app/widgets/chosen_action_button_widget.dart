@@ -44,8 +44,8 @@ class ChosenActionButton extends StatelessWidget {
               if (svgAssetPath != null)
                 SvgPicture.asset(
                   svgAssetPath!,
-                  width: 24,
-                  height: 24,
+                  width: 12,
+                  height: 12,
                 ),
               if (svgAssetPath != null) SizedBox(width: 8),
               Text(text, style: OnboardingTextStyle.button),

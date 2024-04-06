@@ -1,11 +1,19 @@
 import 'dart:io';
-
+import 'package:autoshare/consts/app_text_styles/constructor_text_style.dart';
+import 'package:autoshare/views/app/widgets/chosen_action_button_widget.dart';
+import 'package:autoshare/views/app/widgets/input_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
-
 import '../../../blocs/car_cubit/cars_cubit.dart';
+import '../../../consts/app_colors.dart';
 import '../../../data/model/car_model.dart';
+import '../../app/views/home_screen.dart';
+import '../widgets/color_selection_widget.dart';
+import '../widgets/duration_selection_widget.dart';
+import '../widgets/gear_type_selection_widget.dart';
+import '../widgets/snaff_bar_utils.dart';
 
 class RentScreen extends StatefulWidget {
   @override
@@ -14,219 +22,229 @@ class RentScreen extends StatefulWidget {
 
 class _RentScreenState extends State<RentScreen> {
   final _formKey = GlobalKey<FormState>();
-  late String _photoPath;
-  late String _name;
-  late double _price;
-  late String _duration;
-  late String _gearType;
-  late int _year;
-  late int _horsepower;
-  late String _color;
+  late String _photoPath = '';
+  late TextEditingController _nameController = TextEditingController();
+  late TextEditingController _priceController = TextEditingController();
+  late String _duration = '';
+  late String _gearType = 'automatic';
+  late TextEditingController _yearController = TextEditingController();
+  late TextEditingController _horsepowerController = TextEditingController();
+  late String _color = 'red';
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: Text('Rent Car'),
+        backgroundColor: AppColors.darkGreyColor.withOpacity(0.06),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              GestureDetector(
-                onTap: () async {
-                  final pickedFile = await ImagePicker()
-                      .pickImage(source: ImageSource.gallery);
-                  if (pickedFile != null) {
+      body: Container(
+        color: AppColors.darkGreyColor.withOpacity(0.06),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Form(
+            key: _formKey,
+            child: ListView(
+              children: [
+                GestureDetector(
+                    onTap: () async {
+                      final pickedFile = await ImagePicker()
+                          .pickImage(source: ImageSource.gallery);
+                      if (pickedFile != null) {
+                        setState(() {
+                          _photoPath = pickedFile.path;
+                        });
+                      }
+                    },
+                    child: _photoPath != null && _photoPath.isNotEmpty
+                        ? ConstrainedBox(
+                            constraints: BoxConstraints(
+                              maxWidth: size.width * 0.75,
+                              maxHeight: size.height * 0.2,
+                            ),
+                            child: AspectRatio(
+                              aspectRatio: 3 / 4,
+                              child: Image.file(
+                                File(_photoPath),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          )
+                        : Container(
+                            height: size.height * 0.06,
+                            decoration: BoxDecoration(
+                              color: AppColors.darkGreyColor.withOpacity(0.06),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset('assets/icons/photo.svg'),
+                                SizedBox(width: size.width * 0.01),
+                                Text(
+                                  'Add Photo',
+                                  style: ConstructorTextStyle.photoTile,
+                                )
+                              ],
+                            ))),
+                SizedBox(
+                  height: size.height * 0.015,
+                ),
+                Text(
+                  'Name',
+                  style: ConstructorTextStyle.tileDescription,
+                ),
+                SizedBox(
+                  height: size.height * 0.005,
+                ),
+                InputWidget(
+                  controller: _nameController,
+                ),
+                SizedBox(
+                  height: size.height * 0.015,
+                ),
+                Text(
+                  'Price',
+                  style: ConstructorTextStyle.tileDescription,
+                ),
+                SizedBox(
+                  height: size.height * 0.005,
+                ),
+                InputWidget(
+                  controller: _priceController,
+                  keyboardType: TextInputType.number,
+                ),
+                SizedBox(
+                  height: size.height * 0.015,
+                ),
+                Text(
+                  'How long do you want to turn in your car for?',
+                  style: ConstructorTextStyle.tileDescription,
+                ),
+                SizedBox(
+                  height: size.height * 0.005,
+                ),
+                DurationSelectionWidget(
+                  initialDuration: _duration,
+                  onDurationSelected: (duration) {
                     setState(() {
-                      _photoPath = pickedFile.path;
+                      _duration = duration;
                     });
-                  }
-                },
-                child: Container(
-                  height: 200,
-                  color: Colors.grey[200],
-                  child: _photoPath != null
-                      ? Image.file(File(_photoPath), fit: BoxFit.cover)
-                      : Center(
-                          child: Icon(Icons.add_a_photo, size: 48.0),
-                        ),
+                  },
                 ),
-              ),
-              SizedBox(height: 16.0),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Name',
+                SizedBox(
+                  height: size.height * 0.015,
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a name';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _name = value!;
-                },
-              ),
-              SizedBox(height: 16.0),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Price',
+                Text(
+                  'Gear type',
+                  style: ConstructorTextStyle.tileDescription,
                 ),
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a price';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _price = double.parse(value!);
-                },
-              ),
-              SizedBox(height: 16.0),
-              DropdownButtonFormField<String>(
-                decoration: InputDecoration(
-                  labelText: 'Duration',
+                SizedBox(
+                  height: size.height * 0.005,
                 ),
-                value: _duration,
-                items: ['Daily', 'Weekly', 'Monthly'].map((duration) {
-                  return DropdownMenuItem<String>(
-                    value: duration.toLowerCase(),
-                    child: Text(duration),
-                  );
-                }).toList(),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please select a duration';
-                  }
-                  return null;
-                },
-                onChanged: (value) {
-                  setState(() {
-                    _duration = value!;
-                  });
-                },
-              ),
-              SizedBox(height: 16.0),
-              DropdownButtonFormField<String>(
-                decoration: InputDecoration(
-                  labelText: 'Gear Type',
+                GearTypeSelectionWidget(
+                  initialGearType: _gearType,
+                  onGearTypeSelected: (gearType) {
+                    setState(() {
+                      _gearType = gearType;
+                    });
+                  },
                 ),
-                value: _gearType,
-                items: ['Automatic', 'Manual'].map((gearType) {
-                  return DropdownMenuItem<String>(
-                    value: gearType.toLowerCase(),
-                    child: Text(gearType),
-                  );
-                }).toList(),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please select a gear type';
-                  }
-                  return null;
-                },
-                onChanged: (value) {
-                  setState(() {
-                    _gearType = value!;
-                  });
-                },
-              ),
-              SizedBox(height: 16.0),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Year',
+                SizedBox(
+                  height: size.height * 0.015,
                 ),
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a year';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _year = int.parse(value!);
-                },
-              ),
-              SizedBox(height: 16.0),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Horsepower',
+                Text(
+                  'Year',
+                  style: ConstructorTextStyle.tileDescription,
                 ),
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter the horsepower';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _horsepower = int.parse(value!);
-                },
-              ),
-              SizedBox(height: 16.0),
-              DropdownButtonFormField<String>(
-                decoration: InputDecoration(
-                  labelText: 'Color',
+                SizedBox(
+                  height: size.height * 0.005,
                 ),
-                value: _color,
-                items: [
-                  'Red',
-                  'Orange',
-                  'Yellow',
-                  'Green',
-                  'Blue',
-                  'Purple',
-                  'Pink',
-                  'Brown',
-                  'Gray',
-                  'Black',
-                  'White',
-                ].map((color) {
-                  return DropdownMenuItem<String>(
-                    value: color.toLowerCase(),
-                    child: Text(color),
-                  );
-                }).toList(),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please select a color';
-                  }
-                  return null;
-                },
-                onChanged: (value) {
-                  setState(() {
-                    _color = value!;
-                  });
-                },
-              ),
-              SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    _formKey.currentState!.save();
-                    final car = Car(
-                      id: UniqueKey().toString(),
-                      type: 'rent',
-                      photoPath: _photoPath,
-                      name: _name,
-                      price: _price,
-                      duration: _duration,
-                      gearType: _gearType,
-                      year: _year,
-                      horsepower: _horsepower,
-                      color: _color,
-                    );
-                    context.read<CarsCubit>().addCar(car);
-                    Navigator.pop(context);
-                  }
-                },
-                child: Text('Done'),
-              ),
-            ],
+                InputWidget(
+                  controller: _yearController,
+                  keyboardType: TextInputType.number,
+                ),
+                SizedBox(
+                  height: size.height * 0.015,
+                ),
+                Text(
+                  'Horsepower',
+                  style: ConstructorTextStyle.tileDescription,
+                ),
+                SizedBox(
+                  height: size.height * 0.005,
+                ),
+                InputWidget(
+                  controller: _horsepowerController,
+                  keyboardType: TextInputType.number,
+                ),
+                SizedBox(
+                  height: size.height * 0.015,
+                ),
+                Text(
+                  'Color',
+                  style: ConstructorTextStyle.tileDescription,
+                ),
+                SizedBox(
+                  height: size.height * 0.005,
+                ),
+                ColorSelectionWidget(
+                  initialColor: _color,
+                  onColorSelected: (color) {
+                    setState(() {
+                      _color = color;
+                    });
+                  },
+                ),
+                SizedBox(
+                  height: size.height * 0.015,
+                ),
+                ChosenActionButton(
+                  text: 'Done',
+                  onTap: () {
+                    if (_formKey.currentState!.validate()) {
+                      if (_photoPath.isNotEmpty &&
+                          _nameController.text.isNotEmpty &&
+                          _priceController.text.isNotEmpty &&
+                          _duration.isNotEmpty &&
+                          _gearType.isNotEmpty &&
+                          _yearController.text.isNotEmpty &&
+                          _horsepowerController.text.isNotEmpty &&
+                          _color.isNotEmpty) {
+                        final car = Car(
+                          id: UniqueKey().toString(),
+                          type: 'rent',
+                          photoPath: _photoPath,
+                          name: _nameController.text,
+                          price: double.parse(_priceController.text),
+                          duration: _duration,
+                          gearType: _gearType,
+                          year: int.parse(_yearController.text),
+                          horsepower: int.parse(_horsepowerController.text),
+                          color: _color,
+                        );
+                        context.read<CarsCubit>().addCar(car);
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const HomeScreen(),
+                          ),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnaffBarUtils.showSnackBar(
+                            'Please fill in all the fields',
+                            SnackBarType.error,
+                          ),
+                        );
+                      }
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -35,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
               'assets/icons/cars.svg',
               height: size.height * 0.045,
               color: currentIndex == 0
-                  ? AppColors.blueColor
+                  ? AppColors.blueColor.withOpacity(1)
                   : AppColors.darkGreyColor.withOpacity(0.5),
             ),
             label: 'cars',
