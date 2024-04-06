@@ -33,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(
             icon: SvgPicture.asset(
               'assets/icons/cars.svg',
-              height: size.height * 0.045,
+              height: size.height * 0.03,
               color: currentIndex == 0
                   ? AppColors.blueColor.withOpacity(1)
                   : AppColors.darkGreyColor.withOpacity(0.5),
@@ -43,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(
             icon: SvgPicture.asset(
               'assets/icons/news.svg',
-              height: size.height * 0.045,
+              height: size.height * 0.03,
               color: currentIndex == 1
                   ? AppColors.blueColor
                   : AppColors.darkGreyColor.withOpacity(0.5),
@@ -53,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(
               icon: SvgPicture.asset(
                 'assets/icons/settings.svg',
-                height: size.height * 0.045,
+                height: size.height * 0.03,
                 color: currentIndex == 2
                     ? AppColors.blueColor
                     : AppColors.darkGreyColor.withOpacity(0.5),

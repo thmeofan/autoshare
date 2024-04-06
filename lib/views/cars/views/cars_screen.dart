@@ -184,8 +184,9 @@ class _CarsScreenState extends State<CarsScreen> {
 
   Widget _buildFilterDialog(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    RangeValues _priceRange = RangeValues(50000, 100000.0);
-    RangeValues _yearRange = RangeValues(1990.0, 2023.0);
+    RangeValues _priceRange = const RangeValues(50000, 100000.0);
+    RangeValues _yearRange = const RangeValues(1990.0, 2023.0);
+
     return StatefulBuilder(
       builder: (context, setState) {
         return Dialog(
@@ -245,24 +246,21 @@ class _CarsScreenState extends State<CarsScreen> {
                     children: [
                       Text('Price Range', style: HomeScreenTextStyle.info),
                       SizedBox(height: size.height * 0.005),
-                      GestureDetector(
-                        onPanStart: (_) {},
-                        onPanUpdate: (_) {},
-                        onPanEnd: (_) {},
-                        child: RangeSlider(
-                          activeColor: AppColors.blueColor,
-                          values: _priceRange,
-                          min: 50000,
-                          max: 100000.0,
-                          divisions: 50,
-                          labels: RangeLabels(
-                            _priceRange.start.round().toString(),
-                            _priceRange.end.round().toString(),
-                          ),
-                          onChanged: (values) {
-                            _updatePriceRange(values, setState);
-                          },
+                      RangeSlider(
+                        activeColor: AppColors.blueColor,
+                        values: _priceRange,
+                        min: 50000,
+                        max: 100000.0,
+                        divisions: 50,
+                        labels: RangeLabels(
+                          _priceRange.start.round().toString(),
+                          _priceRange.end.round().toString(),
                         ),
+                        onChanged: (values) {
+                          setState(() {
+                            _priceRange = values;
+                          });
+                        },
                       ),
                     ],
                   ),
@@ -275,24 +273,21 @@ class _CarsScreenState extends State<CarsScreen> {
                     children: [
                       Text('Year Range', style: HomeScreenTextStyle.info),
                       SizedBox(height: size.height * 0.005),
-                      GestureDetector(
-                        onPanStart: (_) {},
-                        onPanUpdate: (_) {},
-                        onPanEnd: (_) {},
-                        child: RangeSlider(
-                          activeColor: AppColors.blueColor,
-                          values: _yearRange,
-                          min: 1990.0,
-                          max: 2023.0,
-                          divisions: 33,
-                          labels: RangeLabels(
-                            _yearRange.start.round().toString(),
-                            _yearRange.end.round().toString(),
-                          ),
-                          onChanged: (values) {
-                            _updateYearRange(values, setState);
-                          },
+                      RangeSlider(
+                        activeColor: AppColors.blueColor,
+                        values: _yearRange,
+                        min: 1990.0,
+                        max: 2023.0,
+                        divisions: 33,
+                        labels: RangeLabels(
+                          _yearRange.start.round().toString(),
+                          _yearRange.end.round().toString(),
                         ),
+                        onChanged: (values) {
+                          setState(() {
+                            _yearRange = values;
+                          });
+                        },
                       ),
                     ],
                   ),

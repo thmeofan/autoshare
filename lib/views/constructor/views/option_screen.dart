@@ -53,7 +53,7 @@ class _OptionScreenState extends State<OptionScreen> {
                 },
                 child: Container(
                   width: double.infinity,
-                  height: size.height * 0.15,
+                  height: size.height * 0.165,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: _selectedOption == 'rent'

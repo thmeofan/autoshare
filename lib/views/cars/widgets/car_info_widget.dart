@@ -82,7 +82,7 @@ class CarInfoWidget extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Horsepower',
+                              'HP',
                               style: HomeScreenTextStyle.label,
                             ),
                             SizedBox(

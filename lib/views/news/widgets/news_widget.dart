@@ -22,7 +22,7 @@ class NewsWidget extends StatelessWidget {
               .pushNamed(AppRoutes.article, arguments: newsModel);
         },
         child: Container(
-          height: screenSize.height * 0.475,
+          height: screenSize.height * 0.49,
           width: double.maxFinite,
           // padding: EdgeInsets.symmetric(vertical: screenSize.width * 0.005),
           decoration: BoxDecoration(
@@ -35,7 +35,7 @@ class NewsWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(15.0),
                 child: FancyShimmerImage(
                   width: screenSize.width,
-                  height: screenSize.height * 0.25,
+                  height: screenSize.height * 0.235,
                   boxFit: BoxFit.cover,
                   imageUrl: newsModel.imageUrl,
                 ),
@@ -58,10 +58,10 @@ class NewsWidget extends StatelessWidget {
                       Row(
                         children: [
                           SizedBox(
-                            width: screenSize.width * 0.6,
+                            width: screenSize.width * 0.58,
                           ),
                           Container(
-                            height: screenSize.height * 0.05,
+                            height: screenSize.height * 0.045,
                             width: screenSize.width * 0.32,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
