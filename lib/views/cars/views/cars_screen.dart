@@ -176,6 +176,7 @@ class _CarsScreenState extends State<CarsScreen> {
                 );
               },
             ),
+            SizedBox(height: size.height * 0.005),
           ],
         ),
       ),
